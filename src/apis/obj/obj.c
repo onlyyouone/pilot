@@ -10,7 +10,7 @@
 
 /**
  * @file obj.c
- * MOD_DESCRIPTION
+ * OBJ_DESCRIPTION
  */
 
 /**

@@ -15,6 +15,7 @@ extern "C" {
 
 #include "../src/common/proj_macro.h"
 #define TEST_MAIN main
+#define NAT_TEST_RUN(func,r) r=func();if(r!=0) goto end;
   
 #ifdef  __cplusplus
 }

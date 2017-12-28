@@ -14,14 +14,17 @@
 extern "C" {
 #endif
 
+/* Project internal header */
+#include "proj_int.h"
+
 /* Include API layer header */
 #include "obj.h"  
-
+  
 /** Structure used to specify Embedded RKM local key store configuration. */
 struct _obj_st
 {
   /* Type of the object */
-  PROJ_OBJ_TYPE obj_type;
+  PROJ_DATA_TYPE obj_type;
 
   /* Other members... */
 };

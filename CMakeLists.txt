@@ -14,12 +14,24 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BUILD_TYPE})
 
 set(EX_PROJ_PLATFORM "linux")
 set(proj_LIBTYPE STATIC)
-set(proj_INC "${CMAKE_CURRENT_SOURCE_DIR}/inc")
 list(APPEND CMAKE_C_FLAGS "-std=c99 -pedantic-errors -Wall -fpic -fPIC")
 
-file(MAKE_DIRECTORY ${proj_INC} )
+# Global include file directory where all product header are located.
+# And the target to create the directory
+set(proj_INC "${CMAKE_CURRENT_SOURCE_DIR}/inc")
+add_custom_target(make_inc_dir)
+add_custom_command(TARGET make_inc_dir PRE_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E make_directory ${proj_INC})
+
+# Target to copy all header files into global header directory. 
 file(GLOB_RECURSE INC "src/*.h" "src/*.inc" "src/obj_list*" )
-file(COPY ${INC}  DESTINATION ${proj_INC})
+add_custom_target(copy_inc_file)
+foreach(incFile ${INC})
+  add_custom_command(TARGET copy_inc_file PRE_BUILD
+                     COMMAND ${CMAKE_COMMAND} -E
+                         copy_if_different ${incFile} ${proj_INC}
+ 		 )
+endforeach()
 
 ####
 set(proj_LIBRARY_DIRS ${CMAKE_CURRENT_LIST_DIR})
@@ -30,6 +42,9 @@ source_group("src" FILES ${SRCS} ${HDRS} )
 
 set(proj_SRC ${SRCS} ${proj_public_SRC})
 add_library(proj STATIC ${SRCS})
+# Make sure include files are copied to inc directory 
+add_dependencies(copy_inc_file make_inc_dir)
+add_dependencies(proj copy_inc_file)
 
 include_directories(${INCLUDE_DIRECTORIES} ${proj_INC})
 link_directories(${LINK_DIRECTORIES})
@@ -37,6 +52,7 @@ link_directories(${LINK_DIRECTORIES})
 target_include_directories(proj PUBLIC ${proj_INC})
 set_target_properties(proj PROPERTIES LINK_FLAGS "-fvisibility=hidden")
 target_link_libraries(proj dl pthread rt)
+
 
 # ------------------------------------------------------------------------------
 # Clang Tidy

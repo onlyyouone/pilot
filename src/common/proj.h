@@ -15,9 +15,9 @@
 extern "C" {
 #endif
 
+#include "proj_enum.h"
 #include "proj_error.h"
 #include "proj_plat.h"
-
 #include "obj_list.inc"
   
 #ifdef  __cplusplus

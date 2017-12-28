@@ -17,7 +17,7 @@ extern "C" {
 #include "proj_error.h"
 #include "proj_plat.h"
 #include "proj_macro.h"
-#include "proj_obj.h"
+#include "proj_enum.h"
 
 #ifdef  __cplusplus
 }

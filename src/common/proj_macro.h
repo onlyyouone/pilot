@@ -25,8 +25,21 @@ extern "C" {
   if (!tmp){r=PROJ_ERROR_ALLOC_FAILURE;goto lab;}		  \
   Memset(tmp,0x00,sizeof(str));
 
-#define NAT_CHECK_IS_NOT_NULL(d,r,tag) if(d==NULL) \
+#define NAT_CHECK_IS_NOT_NULL(d,r,tag) if(d==NULL)	\
     {r=PROJ_ERROR_NULL_DATA;goto tag;}
+
+#define NAT_CHECK_FUNC(func,param,label)  param=func;\
+  if( param != PROJ_ERROR_NONE)						\
+    {									\
+      goto label ;							\
+    }
+
+#define NAT_CHECK_IS_NOT_ZERO_LEN(param,ret, label) if( Strlen(param) == 0) \
+    {									\
+      ret=PROJ_ERROR_BAD_DATA;						\
+      goto label ;							\
+    }
+
 
 #define NAT_FREE(a) if(a) Free(a)
   

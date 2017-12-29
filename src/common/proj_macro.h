@@ -16,7 +16,12 @@ extern "C" {
 
 #define Malloc malloc  
 #define Memset memset
+#define Memcmp memcmp
+#define Memcpy memcpy
 #define Free   free
+#define Strlen    strlen
+#define Strncmp   strncmp
+#define Strncpy   strncpy
   
 #define NAT_FUNC_START(r)      int r=0;
 #define NAT_FUNC_END(r)        return r;
@@ -40,12 +45,13 @@ extern "C" {
       goto label ;							\
     }
 
-
+#define NAT_STRDUP(a,b)  proj_strdup(a,b);
+  
 #define NAT_FREE(a) if(a) Free(a)
   
 #define NAT_TRUE     1
 #define NAT_FALSE    0
-	 
+
 #ifdef  __cplusplus
 }
 #endif

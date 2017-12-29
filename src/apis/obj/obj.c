@@ -53,6 +53,8 @@ void OBJ_free (OBJ *obj)
 }
 /**
  * Clear contents of OBJ structure.
+ * Where possible, this function zerorises the contents
+ * before freeing data.
  *
  * @param obj [In]  Allocated OBJ structure to be cleaned..
  *
@@ -65,8 +67,15 @@ void OBJ_clear (OBJ *obj)
 }
 /**
  * Sets property data to OBJ structure.
+ * Set opration always takes copy of given value. 
+ * If the given value is pointer of structure, set operation
+ * takes deep copy of the structure. 
  *
- * @param obj [In]  Allocated OBJ structure.
+ * Copied value are freed in clear() function.
+ *
+ * @param obj  [In]  Allocated OBJ structure.
+ * @param prop [In]  Property identifier. 
+ * @param data [In]  Data to be set. 
  *
  * @return
  *         #PROJ_ERROR_NONE indicates success. <br>
@@ -78,11 +87,19 @@ int OBJ_set (OBJ *obj,OBJ_PROP prop,PROJ_DATA *data)
 
   switch (prop)
     {
-      
+    case OBJ_PROP_INT_DATA:
+      obj->int_data = data->d.int_d;
+      break;
+
+    case OBJ_PROP_STR_DATA:
+      /* Frees previous data in case there. */
+      NAT_FREE(obj->str_data);
+      NAT_CHECK_FUNC(NAT_STRDUP(data->d.char_p,&(obj->str_data)),ret,end);
+      break;
+
     default:
       ret = PROJ_ERROR_UNSUPPORTED;
       goto end;
-      
     }
   
  end:
@@ -91,8 +108,12 @@ int OBJ_set (OBJ *obj,OBJ_PROP prop,PROJ_DATA *data)
 }
 /**
  * Gets property data from OBJ structure.
+ * Get operation returns values for char, int, long value and 
+ * returns pointers for string data, structures(objects).
  *
- * @param obj [In]  Allocated OBJ structure.
+ * @param obj  [In]   Allocated OBJ structure.
+ * @param prop [In]   Property identifier. 
+ * @param data [Out]  Data to be returned. 
  *
  * @return
  *         #PROJ_ERROR_NONE indicates success. <br>
@@ -104,13 +125,38 @@ int OBJ_get (OBJ *obj,OBJ_PROP prop,PROJ_DATA *data)
 
   switch (prop)
     {
-      
+    case OBJ_PROP_INT_DATA:
+      data->d.int_d=obj->int_data;
+      break;
+
+    case OBJ_PROP_STR_DATA:
+      data->d.char_p=obj->str_data;
+      break;
+
     default:
       ret = PROJ_ERROR_UNSUPPORTED;
       goto end;
       
     }
   
+ end:
+
+  NAT_FUNC_END(ret);
+}
+/**
+ * Deep copy OBJ.
+ *
+ * @param fromj [In]  OBJ to copy.
+ * @param to    [Out] Copied OBJ.
+ *
+ * @return
+ *         #PROJ_ERROR_NONE indicates success. <br>
+ */
+int OBJ_dup (OBJ *from,OBJ *to)
+{
+  NAT_FUNC_START(ret);
+  NAT_CHECK_IS_NOT_NULL(obj,ret,end);
+
  end:
 
   NAT_FUNC_END(ret);

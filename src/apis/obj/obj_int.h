@@ -27,6 +27,9 @@ struct _obj_st
   PROJ_DATA_TYPE obj_type;
 
   /* Other members... */
+  int   int_data;
+  char *str_data;
+
 };
 
 #ifdef  __cplusplus

@@ -22,7 +22,9 @@ typedef struct _obj_st OBJ;
 /* Public data that can be accessed from OBJ */
 typedef enum 
 {
-  OBJ_TYPE,
+  OBJ_PROP_TYPE,
+  OBJ_PROP_INT_DATA,
+  OBJ_PROP_STR_DATA,
 }OBJ_PROP;
 
 /* API declarations */

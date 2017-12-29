@@ -14,6 +14,7 @@
 extern "C" {
 #endif
 
+#include "proj_common.h"
 #include "proj_error.h"
 #include "proj_plat.h"
 #include "proj_macro.h"

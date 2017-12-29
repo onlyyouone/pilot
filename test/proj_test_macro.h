@@ -27,6 +27,11 @@ extern "C" {
     TEST_printf(stdout,"%s %s\n",#func, r==0? PASS:FAIL); }
 
 #define NAT_TEST_RESULT(mod,r)  TEST_printf(stdout,"%s %s\n",#mod,r==0? PASS:FAIL);
+
+#define NAT_TEST_EQL_INT(a,b,r,label)  if(a!=b) {TEST_printf(stdout,"Expected %d but got %d\n",b,a);r=PROJ_ERROR_FAILED;goto label;}
+
+#define NAT_TEST_EQL_STR(a,b,r,label)  if(Strncmp(a,b,strlen(b))) {TEST_printf(stdout,"Expected %s but got %s\n",b,a);r=PROJ_ERROR_FAILED;goto label;}
+
   
 #ifdef  __cplusplus
 }

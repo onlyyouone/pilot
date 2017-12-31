@@ -34,6 +34,8 @@ void OBJ_clear (OBJ *obj);
 int  OBJ_set (OBJ *obj,OBJ_PROP prop, PROJ_DATA *data);
 int  OBJ_get (OBJ *obj,OBJ_PROP prop, PROJ_DATA *data);
 int  OBJ_do_something (OBJ *obj);
+int  OBJ_dup (OBJ *from,OBJ **to);
+int  OBJ_copy_contents (OBJ *from,OBJ *to);
   
 #ifdef  __cplusplus
 }

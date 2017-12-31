@@ -46,6 +46,45 @@ static int set_get()
 
   NAT_FUNC_END(ret);
 }
+static int dup()
+{
+  NAT_FUNC_START(ret);
+  OBJ *obj=NULL;
+  OBJ *to=NULL;
+  PROJ_DATA set_data;
+  PROJ_DATA get_data;
+  int int_expected=0xff;
+  char *str_expected="Hello OBJ";
+  
+  NAT_CHECK_FUNC(OBJ_new(&obj),ret,end);
+
+  /* Set data to OBJ  */
+  Memset(&set_data,0x00,sizeof(set_data));
+  set_data.d.int_d=int_expected;
+  NAT_CHECK_FUNC(OBJ_set(obj,OBJ_PROP_INT_DATA,&set_data),ret,end);
+
+  Memset(&set_data,0x00,sizeof(set_data));
+  set_data.d.char_p=str_expected;
+  NAT_CHECK_FUNC(OBJ_set(obj,OBJ_PROP_STR_DATA,&set_data),ret,end);
+
+  /* Duplicate obj */
+  NAT_CHECK_FUNC(OBJ_dup(obj,&to),ret,end);
+
+  /* Get data from copied OBJ and ensure they are expected */
+  Memset(&get_data,0x00,sizeof(get_data));
+  NAT_CHECK_FUNC(OBJ_get(to,OBJ_PROP_INT_DATA,&get_data),ret,end);
+  NAT_TEST_EQL_INT(get_data.d.int_d,int_expected,ret,end);
+  
+  Memset(&get_data,0x00,sizeof(get_data));
+  NAT_CHECK_FUNC(OBJ_get(to,OBJ_PROP_STR_DATA,&get_data),ret,end);
+  NAT_TEST_EQL_STR(get_data.d.char_p,str_expected,ret,end);
+
+ end:
+  OBJ_free(obj);
+  OBJ_free(to);
+
+  NAT_FUNC_END(ret);
+}
 static int do_something()
 {
   NAT_FUNC_START(ret);
@@ -66,6 +105,7 @@ int TEST_MAIN(int argc,char **argv)
   /* Test implementations */
   NAT_TEST_RUN(new_and_free(),ret);
   NAT_TEST_RUN(set_get(),ret);
+  NAT_TEST_RUN(dup(),ret);
   NAT_TEST_RUN(do_something(),ret);
 
   NAT_TEST_RESULT(OBJ,ret);

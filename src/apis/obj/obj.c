@@ -24,9 +24,9 @@ int OBJ_new (OBJ **obj)
 {
   NAT_FUNC_START(ret);
   OBJ *tmp = NULL;
-
+  
   NAT_MALLOC_STRUCT(tmp,OBJ,ret,end);
-
+  
   tmp->obj_type=PROJ_TYPE_OBJ;
   *obj = tmp;
   tmp=NULL;
@@ -152,10 +152,44 @@ int OBJ_get (OBJ *obj,OBJ_PROP prop,PROJ_DATA *data)
  * @return
  *         #PROJ_ERROR_NONE indicates success. <br>
  */
-int OBJ_dup (OBJ *from,OBJ *to)
+int OBJ_dup (OBJ *from,OBJ **to)
 {
   NAT_FUNC_START(ret);
-  NAT_CHECK_IS_NOT_NULL(obj,ret,end);
+  OBJ *tmp=NULL;
+  NAT_CHECK_IS_NOT_NULL(from,ret,end);
+  NAT_CHECK_IS_NOT_NULL(to,ret,end);
+  
+  /* Create new object */
+   NAT_CHECK_FUNC(OBJ_new(&tmp),ret,end);
+
+  /* Copy contents */ 
+   NAT_CHECK_FUNC(OBJ_copy_contents(from,tmp),ret,end);
+
+   *to=tmp;
+   tmp=NULL;
+ end:
+  NAT_FREE(tmp);
+   
+  NAT_FUNC_END(ret);
+}
+/**
+ * Copy the contents of OBJ. 
+ *
+ * @param fromj [In]  OBJ to copy.
+ * @param to    [Out] Copied OBJ.
+ *
+ * @return
+ *         #PROJ_ERROR_NONE indicates success. <br>
+ */
+int OBJ_copy_contents (OBJ *from,OBJ *to)
+{
+  NAT_FUNC_START(ret);
+  NAT_CHECK_IS_NOT_NULL(from,ret,end);
+  NAT_CHECK_IS_NOT_NULL(to,ret,end);
+  
+  /* Create deep copy */ 
+  NAT_CHECK_FUNC(NAT_STRDUP(from->str_data,&(to->str_data)), ret,end);
+  to->int_data=from->int_data;
 
  end:
 

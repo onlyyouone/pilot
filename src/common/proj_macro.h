@@ -45,7 +45,7 @@ extern "C" {
       goto label ;							\
     }
 
-#define NAT_STRDUP(a,b)  proj_strdup(a,b);
+#define NAT_STRDUP(from,to)  proj_strdup(from,to);
   
 #define NAT_FREE(a) if(a) Free(a)
   

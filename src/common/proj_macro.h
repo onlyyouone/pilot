@@ -4,7 +4,7 @@
 
 /**
  * @file proj_macro.h
- * This file contains macros used for implementation. 
+ * This header contains macros used in implementation and tests. 
  */
 
 #ifndef HEADER_PROJ_MACRO_H
@@ -26,9 +26,9 @@ extern "C" {
 #define NAT_FUNC_START(r)      int r=0;
 #define NAT_FUNC_END(r)        return r;
 #define NAT_FUNC_VOID_END()    return;
-#define NAT_MALLOC_STRUCT(tmp,str,r,lab) tmp=Malloc(sizeof(str)); \
-  if (!tmp){r=PROJ_ERROR_ALLOC_FAILURE;goto lab;}		  \
-  Memset(tmp,0x00,sizeof(str));
+#define NAT_MALLOC_STRUCT(pt,str,r,lab) pt=Malloc(sizeof(str)); \
+  if (!pt){r=PROJ_ERROR_ALLOC_FAILURE;goto lab;}		  \
+  Memset(pt,0x00,sizeof(str));
 
 #define NAT_CHECK_IS_NOT_NULL(d,r,tag) if(d==NULL)	\
     {r=PROJ_ERROR_NULL_DATA;goto tag;}
@@ -39,7 +39,7 @@ extern "C" {
       goto label ;							\
     }
 
-#define NAT_CHECK_IS_NOT_ZERO_LEN(param,ret, label) if( Strlen(param) == 0) \
+#define NAT_CHECK_IS_NOT_ZERO_LEN(str,ret, label) if( Strlen(str) == 0) \
     {									\
       ret=PROJ_ERROR_BAD_DATA;						\
       goto label ;							\

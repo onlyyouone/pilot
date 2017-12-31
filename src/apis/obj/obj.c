@@ -62,7 +62,8 @@ void OBJ_free (OBJ *obj)
 void OBJ_clear (OBJ *obj)
 {
   /* Clear the content of OBJ */
-
+  NAT_FREE(obj->str_data);
+  Memset(obj,0x00,sizeof(OBJ));
   NAT_FUNC_VOID_END();
 }
 /**

@@ -14,7 +14,9 @@
 extern "C" {
 #endif
 
-/*  */
+#include "obj.h"
+
+/** Generic data set to be used in set/get function  */
 typedef struct _proj_data_st
   {
     int type;
@@ -37,7 +39,7 @@ typedef struct _proj_data_st
       unsigned char *uchar_p;
       unsigned char **uchar_pp;
 
-      OBJ *generic_p;
+      OBJ *obj_p;
     }d;
     
 }PROJ_DATA;
